@@ -40,7 +40,7 @@ public class XmlReportParserTest {
 	@Test
 	public void should_parse_report_and_find_mutants() {
 		// given
-		File report = TestUtils.getResource("mutations.xml");
+		File report = ResourceUtils.getResource("mutations.xml");
 
 		// when
 		Collection<Mutant> mutants = parser.parse(report);

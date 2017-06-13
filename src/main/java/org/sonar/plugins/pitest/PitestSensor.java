@@ -88,6 +88,7 @@ public class PitestSensor implements Sensor {
 
     java.io.File reportDirectory = new java.io.File(projectDirectory, reportDirectoryPath);
     java.io.File xmlReport = xmlReportFinder.findReport(reportDirectory);
+
     if (xmlReport == null) {
       LOG.warn("No XML PIT report found in directory {} !", reportDirectory);
       LOG.warn("Checkout plugin documentation for more detailed explanations: http://docs.codehaus.org/display/SONAR/Pitest");
@@ -96,8 +97,6 @@ public class PitestSensor implements Sensor {
       ProjectReport projectReport = ProjectReport.buildFromMutants(mutants);
       processProjectReport(projectReport, context);
     }
-
-
   }
 
 

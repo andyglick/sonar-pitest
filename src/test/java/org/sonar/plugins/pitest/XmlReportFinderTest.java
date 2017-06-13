@@ -32,7 +32,7 @@ public class XmlReportFinderTest {
   public void should_find_report_file() {
     // given
     XmlReportFinder finder = new XmlReportFinder();
-    File xmlFile = TestUtils.getResource("mutations.xml");
+    File xmlFile = ResourceUtils.getResource("mutations.xml");
     File directory = xmlFile.getParentFile();
 
     // when
@@ -46,7 +46,7 @@ public class XmlReportFinderTest {
   public void should_return_null_if_no_report() {
     // given
     XmlReportFinder finder = new XmlReportFinder();
-    File directory = TestUtils.getResource("fake_libs");
+    File directory = ResourceUtils.getResource("fake_libs");
 
     // when
     File report = finder.findReport(directory);
@@ -59,7 +59,7 @@ public class XmlReportFinderTest {
   public void should_return_null_if_directory_does_not_exist() {
     // given
     XmlReportFinder finder = new XmlReportFinder();
-    File directory = TestUtils.getResource("imaginary");
+    File directory = ResourceUtils.getResource("imaginary");
 
     // when
     File report = finder.findReport(directory);

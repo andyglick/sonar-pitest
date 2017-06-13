@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -8,6 +9,7 @@
     <version>31</version>
   </parent>
 
+  <groupId>org.sonarsource.sonar-plugins</groupId>
   <artifactId>sonar-pitest-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
   <version>0.7-SNAPSHOT</version>
@@ -41,18 +43,30 @@
     <tag>HEAD</tag>
   </scm>
 
+  <prerequisites>
+    <maven>${maven.version}</maven>
+  </prerequisites>
+
   <properties>
+    <fest.version>1.4</fest.version>
+    <guava.version>22.0</guava.version>
+    <java.version>1.7</java.version>
+    <jdk.min.version>1.7</jdk.min.version>
+    <junit.version>4.12</junit.version>
     <license.owner>${project.organization.name}</license.owner>
     <license.mailto>alexvictoor@gmail.com</license.mailto>
-    <sonar.buildVersion>5.6</sonar.buildVersion>
-    <sonar-java.version>3.6</sonar-java.version>
-
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jdk.min.version>1.7</jdk.min.version>
-    <junit.version>4.10</junit.version>
+    <logback.version>1.2.3</logback.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.version>3.5.0</maven.version>
     <powermock.version>1.4.10</powermock.version>
-    <fest.version>1.4</fest.version>
-    <guava.version>11.0.2</guava.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <slf4j.version>1.7.25</slf4j.version>
+    <sonar.buildVersion>6.4</sonar.buildVersion>
+    <sonar-java.version>3.6</sonar-java.version>
+    <surefire.reportFormat>plain</surefire.reportFormat>
+    <surefire.useFile>false</surefire.useFile>
+    <surefire.version>2.20</surefire.version>
 
     <!--  eat your own dog food -->
     <sonar.pitest.mode>active</sonar.pitest.mode>
@@ -67,28 +81,46 @@
       <version>${sonar.buildVersion}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>${guava.version}</version>
-  </dependency>
+    </dependency>
 
     <!-- logs -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>0.9.30</version>
+      <version>${logback.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.6.2</version>
+      <version>${slf4j.version}</version>
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.10</version>
+    </dependency>
+
     <!-- unit tests -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.8.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.10.19</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-testing-harness</artifactId>
@@ -104,9 +136,20 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire.version}</version>
         <configuration>
           <testNGArtifactName>none:none</testNGArtifactName>
         </configuration>
@@ -114,7 +157,7 @@
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
-        <version>1.16</version>
+        <version>1.18.0.372</version>
         <extensions>true</extensions>
         <configuration>
           <pluginClass>org.sonar.plugins.pitest.PitestPlugin</pluginClass>
@@ -122,19 +165,10 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
-        <configuration>
-          <source>${jdk.min.version}</source>
-          <target>${jdk.min.version}</target>
-        </configuration>
-      </plugin>
-      <plugin>
         <!-- UTF-8 bundles are not supported by Java, so they must be converted during build -->
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>native2ascii-maven-plugin</artifactId>
-        <version>1.0-alpha-1</version>
+        <version>1.0-beta-1</version>
         <executions>
           <execution>
             <goals>
@@ -153,7 +187,7 @@
       <plugin>
         <groupId>org.pitest</groupId>
         <artifactId>pitest-maven</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.10</version>
         <configuration>
           <targetClasses>
             <param>org.sonar.plugins.pitest*</param>
@@ -166,6 +200,20 @@
             <outputFormat>HTML</outputFormat>
           </outputFormats>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.0.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-help-plugin</artifactId>
+        <version>2.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.3</version>
       </plugin>
     </plugins>
   </build>
